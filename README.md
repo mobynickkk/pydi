@@ -7,7 +7,7 @@ Dependency injection lib for python
 To define the classes that should be injected and stored as bean use decorator `@component`
 
     @component
-    class A:  # A instance will be created and stored in
+    class A:  # A instance will be created and stored in context
         pass
 
 
