@@ -3,6 +3,7 @@ import typing as T
 from .decorators import component as component_
 from .domain import PriorityUniqueQueue
 from .domain.types import Function, Class, V
+from .exceptions import ComponentNotFoundError
 from .injection import create_component
 
 
@@ -34,3 +35,9 @@ def build_dependency_graph() -> None:
     while not queue.empty():
         comp: Class = queue.get()[1]
         create_component(comp, global_context)
+
+
+def get_component_from_context(class_: Class) -> V:
+    if class_ not in global_context:
+        raise ComponentNotFoundError(f'No component with type {class_}')
+    return global_context[class_]
