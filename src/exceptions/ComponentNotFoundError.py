@@ -1,0 +1,2 @@
+class ComponentNotFoundError(Exception):
+    pass
