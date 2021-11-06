@@ -33,7 +33,7 @@ def build_dependency_graph() -> None:
         i: int = len(to_be_injected)
         build_dependency_graph_for_component(el, queue, i)
     while not queue.empty():
-        comp: Class = queue.get()[1]
+        comp: Class = queue.get()
         create_component(comp, global_context)
 
 
