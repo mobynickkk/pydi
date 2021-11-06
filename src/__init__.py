@@ -1,18 +1,23 @@
 import typing as T
 
-from .decorators import component as component_
+from .decorators import component as component_, brick as brick_
 from .domain import PriorityUniqueQueue
 from .domain.types import Function, Class, V
 from .exceptions import ComponentNotFoundError
 from .injection import create_component
+from .enums import ComponentModeEnum
 
 
-to_be_injected: T.List[Class] = list()
+to_be_injected: T.Dict[Class, ComponentModeEnum] = dict()
 global_context: T.Dict[Class, V] = dict()
 
 
 def component(class_: Class):
     return component_(class_, to_be_injected)
+
+
+def brick(class_: Class):
+    return brick_(class_, to_be_injected)
 
 
 def build_dependency_graph_for_component(comp: Class, queue: PriorityUniqueQueue, current_priority: int) -> None:
@@ -29,8 +34,8 @@ def build_dependency_graph_for_component(comp: Class, queue: PriorityUniqueQueue
 
 def build_dependency_graph() -> None:
     queue = PriorityUniqueQueue()
+    i = len(to_be_injected.keys())
     for el in to_be_injected:
-        i: int = len(to_be_injected)
         build_dependency_graph_for_component(el, queue, i)
     while not queue.empty():
         comp: Class = queue.get()
