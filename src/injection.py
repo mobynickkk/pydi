@@ -30,7 +30,7 @@ def inject_dependencies(to_be_injected: Class, strategy: Function,
     return strategy(to_be_injected, annotations, context)
 
 
-def create_component(class_: Class, context: T.Dict[Class, V]) -> Class:
+def get_injected_instance(class_: Class, context: T.Dict[Class, V]) -> V:
     annotations: T.Dict[str, Class]
     instance: class_
     if __has_init_method(class_):
@@ -39,5 +39,13 @@ def create_component(class_: Class, context: T.Dict[Class, V]) -> Class:
     else:
         annotations = class_.__annotations__ if hasattr(class_, '__annotations__') else {}
         instance = inject_dependencies(class_, inject_no_init, annotations, context)
-    context[class_] = instance
+    return instance
+
+
+def create_component(class_: Class, context: T.Dict[Class, V]) -> Class:
+    context[class_] = get_injected_instance(class_, context)
     return class_
+
+
+def create_brick(class_: Class, context: T.Dict[Class, V]) -> V:
+    return get_injected_instance(class_, context)
