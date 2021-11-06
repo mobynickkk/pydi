@@ -1,6 +1,8 @@
 import typing as T
 from queue import PriorityQueue
 
+from .PrioritizedItem import PrioritizedItem
+
 
 class PriorityUniqueQueue:
     __dict: dict
@@ -15,15 +17,15 @@ class PriorityUniqueQueue:
         self.__queue = PriorityQueue()
         self.__put_all(self.__dict.items())
         
-    def __put_all(self, values: T.Iterable[T.Tuple[int, T.Any]]):
+    def __put_all(self, values: T.Iterable[T.Tuple[T.Any, int]]):
         for value in values:
-            self.__queue.put((value[1], value[0]))
+            self.__queue.put(PrioritizedItem(value[1], value[0]))
 
     def empty(self) -> bool:
         return self.__queue.empty()
 
     def get(self) -> T.Any:
-        return self.__queue.get()[0]
+        return self.__queue.get().item
 
     class Inf:
 
